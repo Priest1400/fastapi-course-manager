@@ -1,20 +1,19 @@
 from sqlalchemy.orm.session import  Session
 
 from Exceptions import EmailNotValid
-from schemas import UserBase
+from schemas import UserBase, UserCreate
 from db.models import DbUser
 from db.hash import Hash
 
-def creat_user(db:Session, request: UserBase):
-    if "@" not in request.email:
-        raise EmailNotValid("mail", "lll")
-    user = DbUser(
-        username = request.username ,
-        password = Hash.bcrypt(request.password),
-        email = request.email
-
-    )]
-    db.add(user)
+def create_user(db: Session, user: UserCreate) -> DbUser:
+    db_user = DbUser(
+        username=user.username,
+        email=user.email,
+        password=Hash.bcrypt(user.password),
+        role=user.role,
+        is_active=True
+    )
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
-    return user
+    db.refresh(db_user)
+    return db_user
