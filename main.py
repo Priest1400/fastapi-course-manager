@@ -7,11 +7,13 @@ from db import models
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse, HTMLResponse
 
-from routers import R_Users
+from routers import R_Users, R_Login, R_Admin
 
 app = FastAPI()
 
 app.include_router(R_Users.router)
+app.include_router(R_Login.router)
+app.include_router(R_Admin.router)
 models.base.metadata.create_all(engine)
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get('/')
-def creat_user():
+def hello():
     return "hello"

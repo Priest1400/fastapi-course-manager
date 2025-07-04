@@ -15,3 +15,11 @@ class UserCreate(UserBase):
 class UserOut(UserBase):
     created_at: datetime
     is_active: bool
+
+class CourseBase(BaseModel):
+    title: str
+    instructor: str
+    start_date: datetime
+    end_date: datetime
+    sessions_count: int
+    is_active: bool = True

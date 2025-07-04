@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Column, String, Boolean, ForeignKey , DateTime
+from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, DateTime, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from db.database import base
@@ -15,3 +15,13 @@ class DbUser(base):
     role = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class Course(base):
+    __tablename__ = "courses"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, unique=True, nullable=False, index=True)
+    instructor = Column(String, nullable=False, index=True)
+    start_date = Column(DateTime, nullable=False, index=True)
+    end_date = Column(DateTime, nullable=True)
+    sessions_count = Column(Integer, nullable=False)
+    is_active = Column(Boolean, default=True)
