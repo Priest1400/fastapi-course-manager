@@ -7,13 +7,15 @@ from db import models
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse, HTMLResponse
 
-from routers import R_Users, R_Login, R_Admin
+from routers import R_Users, R_Login, R_Admin, R_Course, R_Students
 
 app = FastAPI()
 
 app.include_router(R_Users.router)
 app.include_router(R_Login.router)
 app.include_router(R_Admin.router)
+app.include_router(R_Course.router)
+app.include_router(R_Students.router)
 models.base.metadata.create_all(engine)
 app.add_middleware(
     CORSMiddleware,

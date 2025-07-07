@@ -9,11 +9,15 @@ from db import db_user, Db_admin
 from auth1 import auth2
 
 
-router = APIRouter(prefix='/admins', tags=['admins'])
 
+router = APIRouter(
+    prefix="/admin",
+    tags=["admin"],
+    dependencies=[Depends(require_admin)]  # 👈 فقط ادمین‌ها مجازند
+)
 @router.get("/")
-def admin_dashboard(current_user=Depends(require_admin)):
-    return {"message": f"خوش آمدی ادمین {current_user.get('sub')}"}
+def admin_dashboard():
+    return {"message": f"خوش آمدی ادمین "}
 @router.post("/add_course", response_model=CourseBase)
 def add_course(course : CourseBase , db : Session = Depends(get_db)):
     existing_course = db.query(Course).filter(Course.title == course.title).first()
