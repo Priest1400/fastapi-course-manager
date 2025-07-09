@@ -22,7 +22,7 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
 
-    # بررسی اینکه قبلاً ثبت‌نام کرده یا نه
+
     existing = db.query(Enrollment).filter_by(
         student_id=current_user["user_id"],
         course_id=course_id
@@ -30,7 +30,7 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
     if existing:
         raise HTTPException(status_code=400, detail="Already enrolled in this course")
 
-    # انجام ثبت‌نام
+
     enrollment = Enrollment(
         student_id=current_user["user_id"],
         course_id=course_id
@@ -39,3 +39,7 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
     db.commit()
     db.refresh(enrollment)
     return {"message": "Successfully enrolled", "course": course.title}
+
+@router.get("/test")
+def test(current_user = Depends(auth2.get_current_user), db: Session = Depends(get_db)):
+    return Db_admin.get_time_of_course(current_user, db)

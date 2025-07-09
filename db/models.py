@@ -2,7 +2,7 @@ from sqlalchemy import Integer, Column, String, Boolean, ForeignKey, DateTime, F
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from db.database import base
-
+from sqlalchemy import Time
 
 class DbUser(base):
     __tablename__ = 'users'
@@ -26,6 +26,9 @@ class Course(base):
     end_date = Column(DateTime, nullable=True)
     sessions_count = Column(Integer, nullable=False)
     is_active = Column(Boolean, default=True)
+    class_day = Column(String, nullable=False)  # مثلا: "سه‌شنبه"
+    class_start_time = Column(Time, nullable=False)  # مثلا: 08:00
+    class_end_time = Column(Time, nullable=False)
 
     enrollments = relationship("Enrollment", back_populates="course")
 

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from typing import Optional
 from pydantic import BaseModel, EmailStr
-
+from datetime import time
 
 class UserBase(BaseModel):
     username: str
@@ -23,3 +23,6 @@ class CourseBase(BaseModel):
     end_date: datetime
     sessions_count: int
     is_active: bool = True
+    class_day: str
+    class_start_time: time
+    class_end_time: time
