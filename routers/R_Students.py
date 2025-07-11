@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query, Request, H
 from sqlalchemy.orm import Session
 
 from auth1.auth2 import oauth2_scheme, require_student
+from db.Db_admin import get_time_of_course
 from db.models import DbUser, Course, Enrollment
 from db.database import get_db
 from schemas import UserBase, UserOut, UserCreate, CourseBase
@@ -42,4 +43,6 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
 
 @router.get("/test")
 def test(current_user = Depends(auth2.get_current_user), db: Session = Depends(get_db)):
-    return Db_admin.get_time_of_course(current_user, db)
+    return get_time_of_course(current_user, db)
+
+

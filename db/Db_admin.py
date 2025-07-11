@@ -27,6 +27,19 @@ def add_course(db: Session, course: CourseBase) -> Course:
 
 
 def get_time_of_course(current_user, db: Session):
+    # گرفتن تمام آیدی دوره‌هایی که دانشجو در آن‌ها ثبت‌نام کرده
     enrollments = db.query(Enrollment).filter(Enrollment.student_id == current_user.get("user_id")).all()
     course_ids = [e.course_id for e in enrollments]
-    return {"enrolled_course_ids": course_ids}
+
+    # دریافت دوره‌ها بر اساس آیدی‌ها
+    courses = db.query(Course).filter(Course.id.in_(course_ids)).all()
+
+    # ساخت خروجی شامل روز و ساعت هر کلاس
+    return [
+        {
+            "day": course.class_day,
+            "time": f"{course.class_start_time.strftime('%H:%M')} - {course.class_end_time.strftime('%H:%M')}"
+        }
+        for course in courses
+    ]
+
