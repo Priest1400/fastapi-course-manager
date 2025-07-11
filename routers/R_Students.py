@@ -30,6 +30,13 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
     ).first()
     if existing:
         raise HTTPException(status_code=400, detail="Already enrolled in this course")
+    day_of_this_class = course.class_end_time
+    start_time_of_this_class = course.class_start_time
+    end_time_of_this_class = course.class_end_time
+    schedule = get_time_of_course(current_user, db)
+    days = [item["day"] for item in schedule]
+    if day_of_this_class in days:
+        if 
 
 
     enrollment = Enrollment(
@@ -43,6 +50,8 @@ def register_course_by_id(course_id: int, db: Session = Depends(get_db), current
 
 @router.get("/test")
 def test(current_user = Depends(auth2.get_current_user), db: Session = Depends(get_db)):
-    return get_time_of_course(current_user, db)
-
+    print(get_time_of_course(current_user, db))
+    x = get_time_of_course(current_user, db)
+    first_day = x[0]
+    return first_day
 
