@@ -1,23 +1,24 @@
-from sqlalchemy.orm.session import  Session
+from sqlalchemy.orm.session import Session
 
-from Exceptions import EmailNotValid
-from schemas import UserBase, UserCreate
-from db.models import DbUser
-from db.hash import Hash
+from schemas import UserCreate           # اسکیمای ورودی برای ساخت کاربر جدید
+from db.models import DbUser             # مدل دیتابیس برای کاربران
+from db.hash import Hash                 # ماژول هش کردن رمز عبور
 
+# تابع برای ساخت کاربر جدید
 def create_user(db: Session, user: UserCreate) -> DbUser:
     db_user = DbUser(
-        username=user.username,
-        email=user.email,
-        password=Hash.bcrypt(user.password),
-        role=user.role,
-        is_active=True
+        username=user.username,                   # نام کاربری
+        email=user.email,                         # ایمیل
+        password=Hash.bcrypt(user.password),      # رمز عبور هش‌شده
+        role=user.role,                           # نقش (admin یا student)
+        is_active=True                            # فعال بودن حساب
     )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.add(db_user)       # اضافه کردن به session
+    db.commit()           # ذخیره در دیتابیس
+    db.refresh(db_user)   # دریافت مقادیر جدید مانند id از دیتابیس
+    return db_user        # بازگشت شی کاربر ساخته‌شده
 
-def get_user_by_username(username , db:Session):
-    db.query(DbUser).filter(DbUser.username == username).first()
-
+# گرفتن کاربر از دیتابیس بر اساس نام کاربری
+def get_user_by_username(username, db: Session):
+    return db.query(DbUser).filter(DbUser.username == username).first()
+    # جست‌وجو در جدول کاربران و بازگرداندن اولین نتیجه‌ای که نام کاربری‌اش مطابق باشد
